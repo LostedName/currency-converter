@@ -10,6 +10,12 @@ const currencyValueChangeAction = (code, value) => {
         value
     };
 }
+const updateCurrencyRatesAction = (payloads)=>{
+    return {
+        type: UPDATE_CURRENCY_RATES,
+        payloads
+    }
+};
 
 const createInitialState = () => {
     const initialState = {
@@ -84,6 +90,6 @@ const reducer = (state = createInitialState(), action) => {
     }
 
 };
-const store = createStore(reducer,composeWithDevTools(applyMiddleware()));
-export { currencyValueChangeAction };
+const store = createStore(reducer,composeWithDevTools(applyMiddleware(thunk)));
+export { currencyValueChangeAction,updateCurrencyRatesAction };
 export default store;
