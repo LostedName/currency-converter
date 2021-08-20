@@ -6,7 +6,6 @@ export default function Converter(props) {
     const onValueChanged = (code,value)=>{
         
         history.push(`/converter?bank=nbrb&currency=${code}-${+value}`);
-      
         props.store.dispatch(currencyValueChangeAction(code,value));
     }
     return (

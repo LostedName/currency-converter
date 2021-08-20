@@ -72,7 +72,7 @@ const reducer = (state = createInitialState(), action) => {
             //index валюты чьё value изменился
             let index = currencies.findIndex((item) => item.CODE === action.code);
             //меняем value нужной валюты
-            currencies[index].value = +action.value;
+            currencies[index].value = action.value;
             //Количество доллара
             const countBYN = action.value / currencies[index].RATE;
             //пересчитываем все валюты исходя из доллара
@@ -81,8 +81,8 @@ const reducer = (state = createInitialState(), action) => {
                     cur.value = +((countBYN * cur.RATE).toFixed(4));
             });
             return { ...state, currencies: currencies };
-        //CODE Cur_Scale Cur_OfficialRate
-        case UPDATE_CURRENCY_RATES:
+
+            case UPDATE_CURRENCY_RATES:
             let curs = [...action.currencies];
             let stateCurrencies = [...state.currencies];
             let newCurrencies = curs.map((cur) => {
@@ -113,7 +113,6 @@ const reducer = (state = createInitialState(), action) => {
             });
 
             return { ...state, currencies: stateCurrencies };
-            break;
         default:
             return state;
     }
