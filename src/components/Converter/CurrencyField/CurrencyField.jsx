@@ -3,7 +3,6 @@ export default function CurrencyField(props){
     const inputElement = React.createRef();
     const onValueChanged = ()=>{
         const value = inputElement.current.value;
-        console.log(+value);
         if (+value || +value === 0)
         {
             props.onValueChanged(props.currency,value);

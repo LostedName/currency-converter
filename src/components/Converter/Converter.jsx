@@ -1,4 +1,4 @@
-import { currencyValueChangeAC } from '../../redux/store';
+import { currencyValueChangeAction } from '../../redux/store';
 import CurrencyField from './CurrencyField/CurrencyField';
 import { useHistory } from 'react-router';
 export default function Converter(props) {
@@ -7,7 +7,7 @@ export default function Converter(props) {
         
         history.push(`/converter?bank=nbrb&currency=${code}-${+value}`);
       
-        props.store.dispatch(currencyValueChangeAC(code,value));
+        props.store.dispatch(currencyValueChangeAction(code,value));
     }
     return (
         <div className="converter_board">
