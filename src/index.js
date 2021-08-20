@@ -17,6 +17,6 @@ const rerenderDOM = (store)=>{
 
 rerenderDOM(store);
 store.subscribe(()=>{rerenderDOM(store)});
-
 store.dispatch(fetchRates(store.getState().currencies));
+
 

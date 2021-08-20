@@ -1,5 +1,5 @@
-import {applyMiddleware, createStore} from 'redux';
-import {composeWithDevTools} from 'redux-devtools-extension';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk'
 const CURRENCY_VALUE_CHANGE = "CURRENCY_VALUE_CHANGE";
 const UPDATE_CURRENCY_RATES = "UPDATE_CURRENCY_RATES";
@@ -10,10 +10,10 @@ const currencyValueChangeAction = (code, value) => {
         value
     };
 }
-const updateCurrencyRatesAction = ({result})=>{
+const updateCurrencyRatesAction = ({ result }) => {
     return {
         type: UPDATE_CURRENCY_RATES,
-        currencies:result
+        currencies: result
     }
 };
 
@@ -81,26 +81,44 @@ const reducer = (state = createInitialState(), action) => {
                     cur.value = +((countBYN * cur.RATE).toFixed(4));
             });
             return { ...state, currencies: currencies };
-//CODE Cur_Scale Cur_OfficialRate
+        //CODE Cur_Scale Cur_OfficialRate
         case UPDATE_CURRENCY_RATES:
-           let curs = [...action.currencies];
-           let newCurrencies = curs.map((cur)=>{
-            return {
-                CODE:cur.CODE,
-                RATE:1/(cur.Cur_OfficialRate / cur.Cur_Scale)
+            let curs = [...action.currencies];
+            let stateCurrencies = [...state.currencies];
+            let newCurrencies = curs.map((cur) => {
+                return {
+                    CODE: cur.CODE,
+                    RATE: 1 / (cur.Cur_OfficialRate / cur.Cur_Scale)
+                }
+            });
+            console.log(newCurrencies);
+            for (let cur of newCurrencies) {
+                let index = stateCurrencies.findIndex((currency) => currency.CODE === cur.CODE);
+                if (index !== -1)
+                    stateCurrencies[index].RATE = cur.RATE;
             }
-           });
-           console.log(newCurrencies);
-           for (let cur of newCurrencies){
-               
-           }
-           return state;
-        break;
+            let indexBYN = stateCurrencies.findIndex((currency) => currency.CODE === "BYN");
+            stateCurrencies[indexBYN].RATE = 1;
+            console.log(stateCurrencies);
+
+            //Подставляем данные под новые курсы валют
+            let indexUSD = stateCurrencies.findIndex((item) => item.CODE === "USD");
+            stateCurrencies[indexUSD].value = 1;
+            const countOfBYN = 1 / stateCurrencies[indexUSD].RATE;
+            stateCurrencies.forEach((cur, curIndex) => {
+                if (curIndex !== indexUSD)
+                {
+                    cur.value = +((countOfBYN * cur.RATE).toFixed(4));
+                }
+            });
+
+            return { ...state, currencies: stateCurrencies };
+            break;
         default:
             return state;
     }
 
 };
-const store = createStore(reducer,composeWithDevTools(applyMiddleware(thunk)));
-export { currencyValueChangeAction,updateCurrencyRatesAction };
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
+export { currencyValueChangeAction, updateCurrencyRatesAction };
 export default store;
