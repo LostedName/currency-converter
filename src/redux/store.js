@@ -1,5 +1,6 @@
-import { createStore } from 'redux';
-
+import {applyMiddleware, createStore} from 'redux';
+import {composeWithDevTools} from 'redux-devtools-extension';
+import thunk from 'redux-thunk'
 const CURRENCY_VALUE_CHANGE = "CURRENCY_VALUE_CHANGE";
 const UPDATE_CURRENCY_RATES = "UPDATE_CURRENCY_RATES";
 const currencyValueChangeAction = (code, value) => {
@@ -83,6 +84,6 @@ const reducer = (state = createInitialState(), action) => {
     }
 
 };
-const store = createStore(reducer);
+const store = createStore(reducer,composeWithDevTools(applyMiddleware()));
 export { currencyValueChangeAction };
 export default store;
