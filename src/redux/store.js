@@ -10,10 +10,10 @@ const currencyValueChangeAction = (code, value) => {
         value
     };
 }
-const updateCurrencyRatesAction = (payloads)=>{
+const updateCurrencyRatesAction = ({result})=>{
     return {
         type: UPDATE_CURRENCY_RATES,
-        payloads
+        currencies:result
     }
 };
 
@@ -74,16 +74,27 @@ const reducer = (state = createInitialState(), action) => {
             //меняем value нужной валюты
             currencies[index].value = +action.value;
             //Количество доллара
-            const countUSD = action.value / currencies[index].RATE;
+            const countBYN = action.value / currencies[index].RATE;
             //пересчитываем все валюты исходя из доллара
             currencies.forEach((cur, curIndex) => {
                 if (curIndex !== index)
-                    cur.value = +((countUSD * cur.RATE).toFixed(4));
+                    cur.value = +((countBYN * cur.RATE).toFixed(4));
             });
             return { ...state, currencies: currencies };
-
+//CODE Cur_Scale Cur_OfficialRate
         case UPDATE_CURRENCY_RATES:
-           
+           let curs = [...action.currencies];
+           let newCurrencies = curs.map((cur)=>{
+            return {
+                CODE:cur.CODE,
+                RATE:1/(cur.Cur_OfficialRate / cur.Cur_Scale)
+            }
+           });
+           console.log(newCurrencies);
+           for (let cur of newCurrencies){
+               
+           }
+           return state;
         break;
         default:
             return state;

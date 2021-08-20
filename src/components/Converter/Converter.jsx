@@ -1,6 +1,7 @@
 import { currencyValueChangeAction } from '../../redux/store';
 import CurrencyField from './CurrencyField/CurrencyField';
 import { useHistory } from 'react-router';
+import { fetchRates } from './../../asyncAction/newRates';
 export default function Converter(props) {
     const history = useHistory();
     const onValueChanged = (code,value)=>{
